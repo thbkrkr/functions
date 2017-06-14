@@ -1,0 +1,11 @@
+functions:
+  blink:
+    runtime: nodejs
+    handler: blink.handler
+    events:
+      - kafka:
+          topic: thbkrkr.miaou
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}

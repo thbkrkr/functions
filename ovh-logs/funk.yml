@@ -1,0 +1,7 @@
+functions:
+  ovh-logs:
+    runtime: go
+    handler: func.SendLog
+    environment:
+      OVH_LOGS_ENDPOINT: ${env:OVH_LOGS_ENDPOINT}
+      OVH_LOGS_TOKEN: ${env:OVH_LOGS_TOKEN}

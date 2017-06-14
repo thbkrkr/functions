@@ -1,0 +1,22 @@
+functions:
+  ping:
+    runtime: nodejs
+    handler: kafka.ping
+    events:
+      - kafka:
+          topic: thbkrkr.pingpong
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}
+
+  pong:
+    runtime: nodejs
+    handler: kafka.pong
+    events:
+      - kafka:
+          topic: thbkrkr.pingpong
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}
