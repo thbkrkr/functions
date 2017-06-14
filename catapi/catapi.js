@@ -4,7 +4,7 @@ var kafka = require('./kafka')
 var me = 'catapi@funk-bot'
 var topic = 'thbkrkr.miaou'
 
-exports.catapi = function(event, callback) {
+exports.handler = function(event, callback) {
   console.log(event)
 
   // Skip if it's my message
