@@ -10,8 +10,10 @@ import (
 	"github.com/thcdrt/funk-go/event"
 )
 
+var ovhLogs *logrus.Logger
+
 func SendLog(event event.Event) (string, error) {
-	logger, err := newLogger()
+	l, err := getLogger()
 	if err != nil {
 		return "", err
 	}
@@ -21,11 +23,24 @@ func SendLog(event event.Event) (string, error) {
 		return "", err
 	}
 
-	logger.Print(string(data))
+	l.Print(string(data))
 	return "Log sent!", nil
 }
 
+func getLogger() (*logrus.Logger, error) {
+	if ovhLogs == nil {
+		var err error
+		ovhLogs, err = newLogger()
+		if err != nil {
+			return nil, err
+		}
+	}
+	return ovhLogs, nil
+}
+
 func newLogger() (*logrus.Logger, error) {
+	logrus.Info("new logger")
+
 	endpoint := os.Getenv("OVH_LOGS_ENDPOINT")
 	token := os.Getenv("OVH_LOGS_TOKEN")
 	hook, err := logrusOVH.NewOvhHook(endpoint, token, logrusOVH.GELFTLS)
