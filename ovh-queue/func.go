@@ -8,7 +8,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/ovh/go-ovh/ovh"
-	"github.com/thcdrt/funk-go/event"
+	"github.com/ovhlabs/functions/go-sdk/event"
 )
 
 func ListOvhQueueApp(event event.Event) (string, error) {

@@ -1,4 +1,9 @@
+
+provider:
+  name: funk
+
 functions:
+
   ovh-logs:
     runtime: go
     handler: func.SendLog

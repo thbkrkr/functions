@@ -2,7 +2,7 @@ var request = require('request');
 
 // produces a ping, unless triggered on a "ping" event
 exports.ping = function(event, callback) {
-  if (event.data == "pong") {
+  if (event.data.message && event.data.message == "pong") {
     console.log("Got", event.data, "producing", "ping");
     produce("ping", callback);
   } else {
@@ -13,7 +13,7 @@ exports.ping = function(event, callback) {
 
 // if receives a ping, produces a pong
 exports.pong = function(event, callback) {
-  if (event.data == "ping") {
+  if (event.data.message && event.data.message == "ping") {
     console.log("Got", event.data, "producing", "pong");
     produce("pong", callback);
   } else {
@@ -28,6 +28,9 @@ function produce(message, callback) {
   var kafkaPassword = process.env["KAFKA_PASSWORD"]
   var topic = 'thbkrkr.pingpong'
 
+  event = { user: 'pingpong@bot-bot1', message: message }
+  event = JSON.stringify(event)
+
   var start = +new Date()
   request.post(
     kafkaHost + '/topic/' + topic,
@@ -36,7 +39,7 @@ function produce(message, callback) {
         user: kafkaUser,
         password: kafkaPassword
       },
-      json: [ { Value: message } ],
+      json: [ { Value: event } ],
     },
     function (error, response, body) {
       console.log("Kafka production status:", response.statusCode, body, "in", +new Date() - start)
