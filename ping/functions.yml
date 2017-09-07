@@ -1,0 +1,6 @@
+functions:
+  ping:
+    runtime: nodejs
+    handler: f.ping
+    environment:
+      URL: "{{.cds.app.URL}}"
