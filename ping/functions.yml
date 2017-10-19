@@ -3,4 +3,8 @@ functions:
     runtime: nodejs
     handler: f.ping
     environment:
-      URL: "{{.cds.app.URL}}"
+      CDS_APP_URL: "{{.cds.app.URL}}"
+      CDS_ENV_BIM1: "{{.cds.env.BIM}}"
+      CDS_ENV_BIM2: "${env:CDS_ENV_BIM}"
+      LANG: "${env:LANG}"
+
