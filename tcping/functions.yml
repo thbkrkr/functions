@@ -1,0 +1,4 @@
+functions:
+  tcping:
+    runtime: go
+    handler: func.TcpPing
