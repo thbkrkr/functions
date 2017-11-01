@@ -4,25 +4,56 @@ import (
 	"encoding/json"
 	"os"
 	"sync"
-	"time"
 
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"github.com/ovh/go-ovh/ovh"
 	"github.com/ovhlabs/functions/go-sdk/event"
 )
 
-func ListOvhQueueApp(event event.Event) (string, error) {
-	client, _ := ovh.NewClient(
+var client *ovh.Client
+
+func init() {
+	client, _ = ovh.NewClient(
 		"ovh-eu",
 		os.Getenv("OVH_AK"),
 		os.Getenv("OVH_AS"),
 		os.Getenv("OVH_CK"),
 	)
+}
 
-	var ids []string
-	err := client.Get("/dbaas/queue", &ids)
+func ListApps(event event.Event) (string, error) {
+	apps, err := find("/dbaas/queue", "")
 	if err != nil {
 		return "", err
+	}
+
+	json, err := json.Marshal(apps)
+	if err != nil {
+		return "", err
+	}
+
+	return string(json), nil
+}
+
+func ListTopics(event event.Event) (string, error) {
+	apps, err := find("/dbaas/queue", "/topic")
+	if err != nil {
+		return "", err
+	}
+
+	json, err := json.Marshal(apps)
+	if err != nil {
+		return "", err
+	}
+
+	return string(json), nil
+}
+
+func find(url string, prefix string) ([]interface{}, error) {
+	var ids []string
+	err := client.Get(url, &ids)
+	if err != nil {
+		return nil, err
 	}
 
 	results := make([]interface{}, len(ids))
@@ -34,25 +65,18 @@ func ListOvhQueueApp(event event.Event) (string, error) {
 		go func(index int, sid string) {
 			defer wg.Done()
 
-			start := time.Now()
 			var result interface{}
-			err = client.Get("/dbaas/queue/"+sid, &result)
+			err = client.Get(url+"/"+sid+prefix, &result)
 			if err != nil {
+				log.WithError(err).Error("Fail to get ", url+sid)
 				return
 			}
 			results[index] = result
-
-			logrus.Infof("Get /dbaas/queue/"+sid+" in %s", time.Since(start))
 
 		}(i, id)
 	}
 
 	wg.Wait()
 
-	json, err := json.Marshal(results)
-	if err != nil {
-		return "", err
-	}
-
-	return string(json), nil
+	return results, nil
 }

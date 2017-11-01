@@ -1,7 +1,15 @@
 functions:
-  ovh-queue:
+  oq_apps:
     runtime: go
-    handler: func.ListOvhQueueApp
+    handler: func.ListApps
+    environment:
+      OVH_AK: ${env:OVH_AK}
+      OVH_AS: ${env:OVH_AS}
+      OVH_CK: ${env:OVH_CK}
+
+  oq_topics:
+    runtime: go
+    handler: func.ListTopics
     environment:
       OVH_AK: ${env:OVH_AK}
       OVH_AS: ${env:OVH_AS}
