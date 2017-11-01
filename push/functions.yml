@@ -1,0 +1,33 @@
+functions:
+
+  push.kafka:
+    runtime: nodejs
+    handler: push.kafka
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}
+      KAFKA_TOPIC: ${env:KAFKA_NS}.push
+
+  push.chat:
+    runtime: nodejs
+    handler: push.chat
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}
+      KAFKA_TOPIC: ${env:KAFKA_NS}.miaou
+    events:
+      - kafka:
+          topic: ${env:KAFKA_NS}.push
+
+  push.es:
+    runtime: nodejs
+    handler: push.es
+    environment:
+      ES_HOST: ${env:ES_HOST}
+      ES_USER: ${env:ES_USER}
+      ES_PASSWORD: ${env:ES_PASSWORD}
+    events:
+      - kafka:
+          topic: ${env:KAFKA_NS}.push
