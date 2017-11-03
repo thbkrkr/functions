@@ -1,0 +1,16 @@
+functions:
+
+  push.mm:
+    runtime: nodejs
+    handler: push.mm
+    events:
+      - kafka:
+          region: ${env:KAFKA_TRIGGER_REGION}
+          username: ${env:KAFKA_TRIGGER_USER}
+          password: ${env:KAFKA_TRIGGER_PASSWORD}
+          topic: ${env:KAFKA_TRIGGER_TOPIC}
+    environment:
+      KAFKA_HOST: ${env:KAFKA_HOST}
+      KAFKA_USER: ${env:KAFKA_USER}
+      KAFKA_PASSWORD: ${env:KAFKA_PASSWORD}
+      KAFKA_TOPIC: ${env:KAFKA_TOPIC}
