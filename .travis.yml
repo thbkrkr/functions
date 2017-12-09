@@ -1,0 +1,3 @@
+script:
+  - make .ovh-functions-cli
+  - ./.ovh-functions deploy -d tcping
