@@ -1,0 +1,4 @@
+functions:
+  multiget:
+    runtime: go
+    handler: functions.MultiGet
